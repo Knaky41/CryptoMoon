@@ -70,7 +70,7 @@ availablefundsflat = json.dumps(availablefunds)
 #Transforme en dictionnaire
 input_dict = json.loads(availablefundsflat)
 
-#Filtre les fonds dans le compte trade et USDT
+#Filtre les fonds dans le compte trade et en monnaie cible
 output_dict = [x for x in input_dict if x['type'] == 'trade' and x['currency'] == target]
 
 #Ressort la valeur des fonds de la cible dispo en trade
