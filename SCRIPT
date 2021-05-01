@@ -1,0 +1,89 @@
+import json
+from json import loads
+from kucoin.client import Client
+
+api_key = "METTRE LA CLE API"
+api_secret = "METTRE LE SECRET API"
+api_passphrase = "METTRE LA PASSE PHRASE"
+client = Client(api_key, api_secret, api_passphrase)
+
+#Récupére les fonds disponibles
+availablefunds = client.get_accounts()
+
+#Transforme en string
+availablefundsflat = json.dumps(availablefunds)
+
+#Transforme en dictionnaire
+input_dict = json.loads(availablefundsflat)
+
+#Filtre les fonds dans le compte trade et USDT
+output_dict = [x for x in input_dict if x['type'] == 'trade' and x['currency'] == 'USDT']
+
+#Ressort la valeur des USDT dispo en trade
+for x in output_dict:
+    USDT_Trade_Available = (x['available'])
+        
+#Conversion en float  
+USDT_Trade_Available = float(USDT_Trade_Available)    
+print ("Available USDT to trade :", USDT_Trade_Available)    
+
+    
+#Volume d'USDT à trade et conversion en float
+amount = input("Amount of USDT to trade: ")
+amount = float(amount)
+
+#Crypto cible
+target = input("Target: ")
+print ("Target is :", target)
+
+#Formatage du symbole
+symbole = "{}-USDT".format(target)
+
+print (symbole)
+
+
+#Obtention du prix courant
+ticker = client.get_ticker(symbole)
+currentprice = ticker['price']
+
+#Conversion en float
+currentprice = float(currentprice)
+#Mutiplication du ticker par 150%
+Targetprice = currentprice*2.5
+Targetprice = float(Targetprice)
+
+#Passage à deux décimales
+Targetprice = round(Targetprice, 2)
+
+print ("Current price is :", currentprice)
+print ("Target price is :", Targetprice)
+
+#Passage de l'ordre au market price sur le symbole cible avec les fonds indiqués
+order = client.create_market_order(symbole, Client.SIDE_BUY, funds=amount)
+
+#Récupére les fonds disponibles
+availablefunds = client.get_accounts()
+
+#Transforme en string
+availablefundsflat = json.dumps(availablefunds)
+
+#Transforme en dictionnaire
+input_dict = json.loads(availablefundsflat)
+
+#Filtre les fonds dans le compte trade et USDT
+output_dict = [x for x in input_dict if x['type'] == 'trade' and x['currency'] == target]
+
+#Ressort la valeur des fonds de la cible dispo en trade
+for x in output_dict:
+    TARGET_Trade_Available = (x['available'])
+        
+#Conversion en float  
+TARGET_Trade_Available = float(TARGET_Trade_Available)  
+#Passage à 4 décimales 
+TARGET_Trade_Available = round(TARGET_Trade_Available, 4)
+print ("Available TARGET to trade :", TARGET_Trade_Available)
+
+
+#passage d'un ordre limit sell avec le volume total dispo et le target price
+order = client.create_limit_order(symbole, Client.SIDE_SELL, Targetprice,TARGET_Trade_Available)
+
