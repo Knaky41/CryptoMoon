@@ -52,8 +52,8 @@ currentprice = float(currentprice)
 Targetprice = currentprice*2.5
 Targetprice = float(Targetprice)
 
-#Passage à deux décimales
-Targetprice = round(Targetprice, 2)
+#Passage à 6 décimales
+Targetprice = round(Targetprice, 6)
 
 print ("Current price is :", currentprice)
 print ("Target price is :", Targetprice)
@@ -78,9 +78,9 @@ for x in output_dict:
     TARGET_Trade_Available = (x['available'])
         
 #Conversion en float  
-TARGET_Trade_Available = float(TARGET_Trade_Available)  
-#Passage à 4 décimales 
-TARGET_Trade_Available = round(TARGET_Trade_Available, 4)
+TARGET_Trade_Available = float(TARGET_Trade_Available)
+#Passage à 6 décimales 
+TARGET_Trade_Available = round(TARGET_Trade_Available, 4)-0.0001
 print ("Available TARGET to trade :", TARGET_Trade_Available)
 
 
